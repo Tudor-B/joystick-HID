@@ -1,0 +1,4 @@
+class KBInterface(object):
+    pass
+
+

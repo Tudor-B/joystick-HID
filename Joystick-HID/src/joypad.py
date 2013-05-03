@@ -3,15 +3,20 @@
 
 import os
 import pygame 
-#import win32api
-#import win32con 
-import sys		# Imports pygame library that are made for developing games
-from MouseInterface import MouseInterface
 
+import sys		# Imports pygame library that are made for developing games
+if os.name == 'nt':
+	from WinMouseInterface import MouseInterface
+	from WinKBInterface import KBInterface
+	pass
+elif os.name == 'posix':
+	from LinMouseInterface import MouseInterface
+	from LinKBInterface import KBInterface
+	pass
 
 pygame.init()			# Starts pygame
 t = pygame.time.Clock()		# Make a tracker
-
+keyboard = KBInterface()
 mouse = MouseInterface()
 
 # TODO: change the default value to something dynamic
@@ -34,9 +39,7 @@ try:
 	print "Press button 0 to exit"
 	
 # Start showing the info in terminal
-		
 
-		
 	def loop():
 		global d, t
 
@@ -50,22 +53,20 @@ try:
 					xy_data+= [str(round(d.get_axis(c),1))]
 					if int(float(xy_data[0])) == 1:
 						mouse.MovementRight()
-						mouse.MovementUp()
 						
 					elif int(float(xy_data[0])) == -1:
 						mouse.MovementLeft()
-						mouse.MovementDown()
-# 					
+#				
 # 					elif int(float(xy_data[1])) == 1:
 #  						mouse.MovementDown()
 # 					elif int(float(xy_data[1])) == -1:
 # 						mouse.MovementUp()
-					
+#					
 # 					if int(float(xy_data[1])) == -1:
 # 						mouse.MovementUp()
 # 					print x,y
 # 					print int(float(xy_data[0]))
-					#xy_True+= [int(xy_data)]
+#					#xy_True+= [int(xy_data)]
 #     					if xy_data[0] == "1.0":
 #     						x=x+1
 #     					if xy_data[0] == "-1.0":
@@ -74,36 +75,49 @@ try:
 					#	y=y+1
 					#if xy_data[1] == "-1.0":
 					#	y=y-1
-				
+#				
 # 				mouse.SetPosition( x, y )
-# 				win32api.SetCursorPos((x, y))
-				print "Works?"
-				print xy_data
+#				print "Works?"
+#				print xy_data
 				
-				#print radar
 			
 			# Button Part Down
 			downbutton = pygame.event.get(pygame.JOYBUTTONDOWN)
 			for button in downbutton:
-				print "Pressed button is", button.button
+#				print "Pressed button is", button.button
 				if button.button == 0:			# The exit button
 					return
 				elif button.button == 2:
 					mouse.ClickLeft()
 				elif button.button == 3:
 					mouse.ClickRight()
+				elif button.button == 4:
+					keyboard.KeyUp_Down()
+				elif button.button == 5:
+					keyboard.KeyRight_Down()
+				elif button.button == 6:
+					keyboard.KeyDown_Down()
+				elif button.button == 7:
+					keyboard.KeyLeft_Down()
 			
-				print (pygame.mouse.get_pos())
+#				print (pygame.mouse.get_pos())
 		
 		# Button Part Up
 			upbutton = pygame.event.get(pygame.JOYBUTTONUP)
 			for button in upbutton:
-				print "Button released was", button.button
+#				print "Button released was", button.button
+				if button.button == 4:
+					keyboard.KeyUp_Up()
+				elif button.button == 5:
+					keyboard.KeyRight_Up()
+				elif button.button == 6:
+					keyboard.KeyDown_Up()
+				elif button.button == 7:
+					keyboard.KeyLeft_Up()
+			
 			t.tick(80)
 	loop()
 
 except Exception, e:
 	print "Unhandled exception: %s"%e
 	print "Shutting down now"
-
-#Nicklas Jensen

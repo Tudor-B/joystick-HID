@@ -1,0 +1,4 @@
+class MouseInterface(object):
+    pass
+
+
